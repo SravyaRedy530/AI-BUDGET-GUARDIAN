@@ -1,10 +1,22 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const metaEnv = (import.meta as any).env;
+  if (metaEnv && metaEnv.VITE_API_BASE_URL) {
+    return metaEnv.VITE_API_BASE_URL;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return 'https://ai-budget-backend.onrender.com/api/v1';
+  }
+  return '/api/v1';
+};
+
 export const apiClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000,
 });
 
 apiClient.interceptors.request.use(
@@ -27,7 +39,7 @@ apiClient.interceptors.response.use(
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
         try {
-          const res = await axios.post('/api/v1/auth/refresh', { refreshToken });
+          const res = await axios.post(`${getBaseURL()}/auth/refresh`, { refreshToken });
           if (res.data.success) {
             localStorage.setItem('accessToken', res.data.data.accessToken);
             localStorage.setItem('refreshToken', res.data.data.refreshToken);
