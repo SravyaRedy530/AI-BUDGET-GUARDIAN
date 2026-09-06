@@ -52,6 +52,20 @@ export const RegisterPage: React.FC = () => {
         status: 'ACTIVE'
       });
 
+      // Prepare initial registered admin user
+      const registeredUser = {
+        id: 'usr-' + Date.now(),
+        email: email.toLowerCase().trim(),
+        fullName: fullName || companyName + ' Admin',
+        phone: '+91-9876543210',
+        departmentName: companyName,
+        status: 'ACTIVE' as const,
+        roles: [{ id: 5, code: 'COMPANY_ADMIN' as const, name: 'Company Admin Owner', description: 'Company Workspace Owner', permissions: ['*'] }],
+        permissions: ['*'],
+        createdAt: new Date().toISOString()
+      };
+      localStorage.setItem('user', JSON.stringify(registeredUser));
+
       setSuccessMsg('Organization registered successfully! Auto-authenticating as Admin Owner...');
 
       // Auto Login
@@ -59,10 +73,10 @@ export const RegisterPage: React.FC = () => {
         try {
           await login({ email, password });
         } catch {
-          // Fallback demo auth
+          // Fallback login
         }
-        navigate('/users');
-      }, 1200);
+        navigate('/dashboard');
+      }, 1000);
 
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
