@@ -1,0 +1,25 @@
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Java / Spring Boot Backend
+backend/target/
+*.class
+*.jar
+
+# Python AI Service
+ai-service/__pycache__/
+ai-service/app/__pycache__/
+ai-service/app/api/__pycache__/
+ai-service/app/modules/__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/
+
+# System & IDE
+.DS_Store
+.vscode/
+.idea/
+*.log
